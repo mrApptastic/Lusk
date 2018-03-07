@@ -1,4 +1,4 @@
-#back,#middle,#antagonists,#protagonist,#front {
+#back,#front {
 	height: 100vh;
 	width: 100vw;
 	position: absolute;
@@ -9,18 +9,7 @@
 
 #back {
 	z-index: 0;
-}
-
-#middle {
-	z-index: 25;
-}
-
-#antagonists {
-	z-index: 30;
-}
-
-#protagonist {
-	z-index: 35;
+	background: lightblue;
 }
 
 #front {
