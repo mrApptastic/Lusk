@@ -7,17 +7,14 @@ var lusk = function (elem) {
 	ib.ct.imageSmoothingEnabled = false;
 	
 	ib.ct.clear = function() {
-		ib.clearRect(0, 0, ib.width, ib.height);
+		ib.ct.clearRect(0, 0, 400, 400);
 	};
-	ib.ct.reSize = function (width, height) {
-		ib.height = height;
-		ib.width = width;
-	};
-	// ib.img = new Image();
-	// ib.img.src = "Sprites/Lusk/Lusk2.png";
-	// ib.ct.drawImage(ib.img, 5, 5);
+	ib.ct.reSize = function (wth, hgt) {
+		ib.height = hgt;
+		ib.width = wth;
+	};	
 	ib.global = {
-		maxX : 100,
+		maxX : 300,
 		maxY : 100,
 		step : 5,
 		gravity : 10,
@@ -25,11 +22,14 @@ var lusk = function (elem) {
 		level : 1,
 		falling : false,
 		game : null,
-		clock : 50
+		clock : 30
 	};
 	
 	ib.protagonist = {
 		element : null, // document.getElementById("protagonist"),
+		selectedFrame : 0,
+		img : new Image(),	
+		frms : ["Sprites/Runner/Runner-Running-0.png","Sprites/Runner/Runner-Running-1.png","Sprites/Runner/Runner-Running-2.png","Sprites/Runner/Runner-Running-3.png","Sprites/Runner/Runner-Running-4.png","Sprites/Runner/Runner-Running-5.png","Sprites/Runner/Runner-Running-6.png","Sprites/Runner/Runner-Running-7.png"],
 		x : 45,
 		y : 0
 	};
@@ -45,6 +45,11 @@ var lusk = function (elem) {
 	};
 
 	ib.init = function () {
+		// var wt = window.innerWidth;
+		// var ht = window.innerHeight;
+		// ib.global.maxX = wt;
+		// ib.global.maxY = ht;
+		//ib.ct.reSize(400, 400);
 		ib.protagonist.y = ib.global.maxY;
 		ib.placeItem();
 		ib.start();
@@ -66,14 +71,22 @@ var lusk = function (elem) {
 	};
 
 	ib.handleEvents = function () {
-		ib.ct.clear();
+		//ib.ct.clear();
 		ib.handleGravity();
 	};
-
 	ib.placeItem = function (index) {
 		if (!index) {
-			ib.ct.fillStyle = "Red";
-			ib.ct.fillRect(ib.protagonist.x,ib.protagonist.y,20,20);
+			//ib.ct.fillStyle = "Red";
+			//ib.ct.fillRect(ib.protagonist.x,ib.protagonist.y,20,20);
+			if (ib.protagonist.selectedFrame < ib.protagonist.frms.length) {
+				ib.protagonist.selectedFrame++;
+			}
+			else {
+				ib.protagonist.selectedFrame = 0;
+			}
+			ib.protagonist.img.src = ib.protagonist.frms[ib.protagonist.selectedFrame];
+			ib.ct.clear();
+			ib.ct.drawImage(ib.protagonist.img, ib.protagonist.x, ib.protagonist.y - 74);			
 			/*
 			ib.protagonist.element.style.left = ib.protagonist.x + "vw";
 			ib.protagonist.element.style.top = ib.protagonist.y + "vh";
