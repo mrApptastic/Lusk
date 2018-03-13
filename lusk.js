@@ -22,7 +22,7 @@ var lusk = function (elem) {
 		level : 1,
 		falling : false,
 		game : null,
-		clock : 30
+		clock : 50
 	};
 	
 	ib.protagonist = {
@@ -31,10 +31,22 @@ var lusk = function (elem) {
 		img : new Image(),	
 		frms : ["Sprites/Runner/Runner-Running-0.png","Sprites/Runner/Runner-Running-1.png","Sprites/Runner/Runner-Running-2.png","Sprites/Runner/Runner-Running-3.png","Sprites/Runner/Runner-Running-4.png","Sprites/Runner/Runner-Running-5.png","Sprites/Runner/Runner-Running-6.png","Sprites/Runner/Runner-Running-7.png"],
 		x : 45,
-		y : 0
+		y : 0,
+		h : 125,
+		w : 125
 	};
 	
-	ib.antagonists = [];
+	ib.antagonists = [
+	{
+ 		selectedFrame : 0,
+		img : new Image(),	
+		frms : ["Sprites/MrUfo/mrUfo_0.png","Sprites/MrUfo/mrUfo_1.png","Sprites/MrUfo/mrUfo_2.png","Sprites/MrUfo/mrUfo_3.png","Sprites/MrUfo/mrUfo_4.png","Sprites/MrUfo/mrUfo_5.png"],
+		x : 0,
+		y : 80,		
+		h : 100,
+		w : 100
+	}
+	];
 	
 	ib.start = function () {
 		ib.global.game = setInterval(ib.handleEvents, ib.global.clock);
@@ -58,8 +70,7 @@ var lusk = function (elem) {
 	ib.handleGravity = function () {
 		if (ib.protagonist.y < ib.global.maxY) {
 			ib.global.falling = true;
-			ib.protagonist.y += ib.global.gravity;		
-			ib.placeItem();
+			ib.protagonist.y += ib.global.gravity;				
 		}
 		else {
 			ib.global.falling = false;
@@ -71,11 +82,16 @@ var lusk = function (elem) {
 	};
 
 	ib.handleEvents = function () {
-		//ib.ct.clear();
-		ib.handleGravity();
+		ib.ct.clear();
+		ib.handleGravity();		
+		for (let i = 0; i < ib.antagonists.length; i++) {
+			ib.placeItem(i);
+		}
+		ib.placeItem();
 	};
 	ib.placeItem = function (index) {
-		if (!index) {
+
+		if (index === undefined || index === null) {
 			//ib.ct.fillStyle = "Red";
 			//ib.ct.fillRect(ib.protagonist.x,ib.protagonist.y,20,20);
 			if (ib.protagonist.selectedFrame < ib.protagonist.frms.length) {
@@ -85,19 +101,24 @@ var lusk = function (elem) {
 				ib.protagonist.selectedFrame = 0;
 			}
 			ib.protagonist.img.src = ib.protagonist.frms[ib.protagonist.selectedFrame];
-			ib.ct.clear();
-			ib.ct.drawImage(ib.protagonist.img, ib.protagonist.x, ib.protagonist.y - 74);			
+			//ib.ct.clear();
+			ib.ct.drawImage(ib.protagonist.img, ib.protagonist.x, ib.protagonist.y - 74, ib.protagonist.w, ib.protagonist.h);			
 			/*
 			ib.protagonist.element.style.left = ib.protagonist.x + "vw";
 			ib.protagonist.element.style.top = ib.protagonist.y + "vh";
 			*/
 		}
 		else {
-
-			/*
-			ib.antagonists[index].element.style.left = ib.protagonist.x + "vw";
-			ib.antagonists[index].element.style.top = ib.protagonist.y + "vh";
-			*/
+			
+			if (ib.antagonists[index].selectedFrame < ib.antagonists[index].frms.length) {
+				ib.antagonists[index].selectedFrame++;
+			}
+			else {
+				ib.antagonists[index].selectedFrame = 0;
+			}
+			ib.antagonists[index].img.src = ib.antagonists[index].frms[ib.antagonists[index].selectedFrame];
+			//ib.ct.clear();
+			ib.ct.drawImage(ib.antagonists[index].img, ib.antagonists[index].x, ib.antagonists[index].y - 74, ib.antagonists[index].w, ib.antagonists[index].h);	
 		}	
 	};
 
@@ -123,7 +144,7 @@ var lusk = function (elem) {
 				ib.protagonist.x -= ib.global.step;
 			}	
 		}
-		ib.placeItem();
+		//ib.placeItem();
 	};
 	
 	ib.init();

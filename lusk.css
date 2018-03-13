@@ -9,9 +9,17 @@
 
 #back {
 	z-index: 0;
-	background: lightblue;
+	background-image: url('Sprites/background.png');
+	background-repeat: repeat-x;
+	background-size: auto 100vh;
+    animation: movingBackground 5s linear infinite;
 }
 
 #front {
 	z-index: 50;
+}
+
+@keyframes movingBackground {
+	from {background-position: 100vw;}
+    to {background-position: 0vw;}
 }
