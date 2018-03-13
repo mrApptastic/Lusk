@@ -22,7 +22,8 @@ var lusk = function (elem) {
 		level : 1,
 		falling : false,
 		game : null,
-		clock : 50
+		clock : 50,
+		ticks : 0
 	};
 	
 	ib.protagonist = {
@@ -45,6 +46,15 @@ var lusk = function (elem) {
 		y : 80,		
 		h : 100,
 		w : 100
+	},
+	{
+ 		selectedFrame : 0,
+		img : new Image(),	
+		frms : ["Sprites/Bat/Bat_Flying_1.png","Sprites/Bat/Bat_Flying_2.png"],
+		x : 120,
+		y : 72,		
+		h : 50,
+		w : 50
 	}
 	];
 	
@@ -76,21 +86,36 @@ var lusk = function (elem) {
 			ib.global.falling = false;
 		}
 	};
-
+	
 	ib.handleAntagonists = function () {
 
 	};
-
+	
+	ib.handleCollisons = function () {
+		for (let i = 0; i < ib.antagonists.length; i++) {
+			let b = 20;
+			let x = ib.antagonists[i].x;
+			let y = ib.antagonists[i].y;			
+			if (x >= ib.protagonist.x - b && x <= ib.protagonist.x + b && y >= ib.protagonist.y - b && y <= ib.protagonist.y + b) {
+				ib.global.ticks = 0;
+			}			 
+		}		
+	};
+	
 	ib.handleEvents = function () {
+		ib.global.ticks++;
 		ib.ct.clear();
 		ib.handleGravity();		
+		ib.handleAntagonists();
 		for (let i = 0; i < ib.antagonists.length; i++) {
 			ib.placeItem(i);
 		}
-		ib.placeItem();
+		ib.placeItem();		
+		ib.ct.fillText(ib.global.ticks, ib.elem.width - (ib.global.ticks.toString().length * 7), 10);
+		ib.handleCollisons();
 	};
+	
 	ib.placeItem = function (index) {
-
 		if (index === undefined || index === null) {
 			//ib.ct.fillStyle = "Red";
 			//ib.ct.fillRect(ib.protagonist.x,ib.protagonist.y,20,20);
